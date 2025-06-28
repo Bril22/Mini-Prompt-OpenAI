@@ -48,7 +48,6 @@ export async function POST(req: NextRequest) {
                 headers: { "Content-Type": "text/plain; charset=utf-8" },
             });
         }
-        // Stream OpenAI response to client
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
             async start(controller) {
@@ -63,7 +62,6 @@ export async function POST(req: NextRequest) {
                         const { done, value } = await reader.read();
                         if (done) break;
                         buffer += new TextDecoder().decode(value);
-                        // Parse and forward only the content delta
                         const lines = buffer.split("\n");
                         buffer = lines.pop() || "";
                         for (const line of lines) {
